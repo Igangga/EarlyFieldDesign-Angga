@@ -1,0 +1,105 @@
+
+# In this file, the input values for some additional parameters that are required for NPV calculation are specified. A complete description of the following parameters is provided in the Master Thesis report (sec. 4.1.1).
+
+
+
+
+
+
+# -------------------------------Section 1-------------------------------
+# ------------Specifying the Input Values for Some Parameters------------
+
+
+# Specify: oil price (constant throughout the production period)
+
+param Po := 60;
+
+
+
+# Specify: exchange rate (constant throughout the production period)
+
+param XR := 8.5;
+
+
+
+# Specify: volume conversion constant
+
+param VC := 6.29;
+
+
+
+# Specify: discount rate
+
+param d := 0.12;
+
+
+
+# Specify: fixed exploration expenditure made at time-p (see description of index-p)
+
+param: 	A :=
+#p
+1	665
+2	240
+3	380
+4	366
+;
+
+
+
+# Specify: drilling cost per well
+
+param B := 480;
+
+
+
+# Specify: fixed abandoment expenditure made at time-p (see description of index-p)
+
+param: 	C :=
+#p
+1	192
+2	449
+3	449
+4	192
+;
+
+# Specify: coefficients in a linear function that estimates AbEx
+
+param:	D :=
+#q
+1	12
+2	5
+;
+
+
+
+# Specify: coefficients in a linear function that estimates Subsea-CapEx
+
+param:	E :=
+#r
+1	484
+2	50
+;
+
+
+
+# Specify: coefficients in a linear function that estimates Topside-CapEx
+
+param:	F :=
+#s
+1	0.10914
+2	0.23848
+3	0.22074
+;
+
+
+
+# Specify: coefficients in a linear function that estimates OpEx
+
+param:	G :=
+#t
+1	400
+2	4
+3	0.007388
+4	0.018289
+5	0.022829
+;

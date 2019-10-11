@@ -1,0 +1,259 @@
+
+# This run file can be considered as the main file in the AMPL implementation. Once this file is executed, it will undertake the following things:
+# Section 1 --> Import model, data, econ, and PWL table files
+# Section 2 --> Select a solver to be used & customize the selected solver
+# Section 3 --> Define SOS2/SOS1 conditions associated with PWL approximations
+# Section 4 --> Solve the optimization problem
+# Section 5 --> Extract the optimization results to an output file
+
+
+
+
+
+
+# -------------------------------Section 1-------------------------------
+# ------------Importing Model, Data, Econ, & PWL Table Files-------------
+
+
+# The following lines command AMPL to read the model, data, econ, and PWL table files that we have prepared before.
+
+model CASE-2_Model.mod;
+
+data CASE-2_Data.dat;
+
+data CASE-2_Econ.dat;
+
+data PWL_Table.dat;
+
+
+
+
+
+
+# -------------------------------Section 2-------------------------------
+# -------------------Solver Selection & Customization--------------------
+
+
+# The following line commands AMPL to select a solver to be used. The Master Thesis report presents a comparison of performance between two extensively-used solvers for MILP problem, i.e., CPLEX & Gurobi (sec. 5.6).
+
+option solver cplex;
+
+
+
+# The following line commands AMPL to customize the selected solver. It is done by configuring the solver options. Explanation for the solver options can be found in https://ampl.com/products/solvers/solvers-we-sell/cplex/options/ (for CPLEX) and http://www.gurobi.com/documentation/8.1/ampl-gurobi/parameters.html (for Gurobi).
+
+# Some of the modified solver options are:
+# 1. threads --> define the maximum threads to use. In the Master Thesis report, there is a discussion about the optimum number of CPU cores for solving the optimization problem (sec. 5.5.)
+# 2. timelimit --> define the limit on solve time (unit: sec). In the Master Thesis report, there is an analysis about the optimization runtime (sec. 5.8)
+# 3. mipgap --> define the maximum relative MIP optimality gap
+
+option cplex_options "threads=8 timelimit=43200 mipdisplay=2 mipgap=0.0001 nodefile=3 bestbound return_mipgap=1";
+
+
+
+
+
+
+# -------------------------------Section 3-------------------------------
+# ---------------------Defining SOS2/SOS1 Conditions---------------------
+
+
+# The following lines command AMPL to define SOS2/SOS1 conditions for some sets. These SOS2/SOS1 conditions are associated with PWL approximations. Definition of SOS2/SOS1 condition is given in the Master Thesis report sec. 2.3.1. The sets that subject to SOS2/SOS1 conditions and the reasons for applying these SOS2/SOS1 conditions are provided in the Master Thesis report sec. 3.1.9.
+
+
+
+# Define: SOS2 conditions for some sets (see eq3_15i & eq3_15j)
+
+suffix sosno;
+
+suffix ref;
+
+param itersos2;
+
+let itersos2 := 0;
+
+for{i in R, z in P} {
+	
+	let itersos2 := itersos2-1;
+	
+	let {j in V_Np} eta_Np[i,z,j].sosno := itersos2;
+	
+	let {j in V_Np} eta_Np[i,z,j].ref := Np_bar[i,j,1,1];
+	
+	let itersos2 := itersos2-1;
+	
+	let {k in V_Nop[i]} eta_Nop[i,z,k].sosno := itersos2;
+	
+	let {k in V_Nop[i]} eta_Nop[i,z,k].ref := Nop_bar[i,1,k,1];
+	
+}
+
+
+
+# Define: SOS1 conditions for some sets (see eq3_15k, eq3_17g, & eq3_17h)
+
+param itersos1;
+
+let itersos1 := 0;
+
+for{i in R, z in P} {
+	
+	let itersos1 := itersos1+1;
+	
+	let {l in V_RM[i]} eta_RM[i,z,l].sosno := itersos1;
+	
+	let {l in V_RM[i]} eta_RM[i,z,l].ref := RMpp_bar[i,1,1,l];
+	
+}
+
+for{i in R} {
+	
+	let itersos1 := itersos1+1;
+	
+	let {m in {1,2}} tau_zNgi[i,m].sosno := itersos1;
+	
+	let {m in {1,2}} tau_zNgi[i,m].ref := zNgi_bar[m,1];
+	
+	let itersos1 := itersos1+1;
+	
+	let {n in {1,2}} tau_zNwi[i,n].sosno := itersos1;
+	
+	let {n in {1,2}} tau_zNwi[i,n].ref := zNwi_bar[1,n];
+	
+}
+
+
+
+
+
+
+# -------------------------------Section 4-------------------------------
+# -------------------Solving the Optimization Problem--------------------
+
+
+# The following line commands AMPL to start solving the optimization problem. The optimization process continues until it reaches either the desired optimality gap or the defined time limit.
+
+solve;
+
+
+
+
+
+
+# -------------------------------Section 5-------------------------------
+# ------------------Extracting the Optimization Results------------------
+
+
+# The following lines command AMPL to extract the optimization results to an output file named "CASE-2_Results.out".
+
+display RM 			>CASE-2_Results.out;
+
+display Nop 			>CASE-2_Results.out;
+
+display Nop_F 			>CASE-2_Results.out;
+
+display Ngi 			>CASE-2_Results.out;
+
+display Ngi_F 			>CASE-2_Results.out;
+
+display Nwi 			>CASE-2_Results.out;
+
+display Nwi_F 			>CASE-2_Results.out;
+
+display Nwt 			>CASE-2_Results.out;
+
+display Nwt_F			>CASE-2_Results.out;
+
+display qopp			>CASE-2_Results.out;
+
+display qopp_F			>CASE-2_Results.out;
+
+display qo			>CASE-2_Results.out;
+
+display qo_F			>CASE-2_Results.out;
+
+display qg			>CASE-2_Results.out;
+
+display qg_F			>CASE-2_Results.out;
+
+display qw			>CASE-2_Results.out;
+
+display qw_F			>CASE-2_Results.out;
+
+display qgi			>CASE-2_Results.out;
+
+display qgi_F			>CASE-2_Results.out;
+
+display qwi			>CASE-2_Results.out;
+
+display qwi_F			>CASE-2_Results.out;
+
+display Np			>CASE-2_Results.out;
+
+display Np_F			>CASE-2_Results.out;
+
+display Gp			>CASE-2_Results.out;
+
+display Gp_F			>CASE-2_Results.out;
+
+display Wp			>CASE-2_Results.out;
+
+display Wp_F			>CASE-2_Results.out;
+
+display Gi			>CASE-2_Results.out;
+
+display Gi_F			>CASE-2_Results.out;
+
+display Wi			>CASE-2_Results.out;
+
+display Wi_F			>CASE-2_Results.out;
+
+display PVe			>CASE-2_Results.out;
+
+display PVdp			>CASE-2_Results.out;
+
+display PVd			>CASE-2_Results.out;
+
+display PVa			>CASE-2_Results.out;
+
+display Nt			>CASE-2_Results.out;
+
+display Nt_F			>CASE-2_Results.out;
+
+display Nx_F			>CASE-2_Results.out;
+
+display PVsc			>CASE-2_Results.out;
+
+display qo_F_hat		>CASE-2_Results.out;
+
+display qg_F_hat		>CASE-2_Results.out;
+
+display qw_F_hat		>CASE-2_Results.out;
+
+display PVtc			>CASE-2_Results.out;
+
+display PVap			>CASE-2_Results.out;
+
+display PVo			>CASE-2_Results.out;
+
+display PVr			>CASE-2_Results.out;
+
+display DCF			>CASE-2_Results.out;
+
+display NPV			>CASE-2_Results.out;
+
+display eq4_5			>CASE-2_Results.out;
+
+display eq4_5.bestbound		>CASE-2_Results.out;
+
+display eq4_5.relmipgap		>CASE-2_Results.out;
+
+display _nvars			>CASE-2_Results.out;
+
+display _ncons			>CASE-2_Results.out;
+
+display _solve_elapsed_time	>CASE-2_Results.out;
+
+display _solve_time 		>CASE-2_Results.out;
+
+close CASE-2_Results.out;

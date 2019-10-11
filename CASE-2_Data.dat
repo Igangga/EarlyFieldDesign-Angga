@@ -1,0 +1,72 @@
+
+# In this data file, the input values for most parameters are specified (except the PWL table to carry out 3D PWL approximations and the ones required for NPV calculation). A complete description of the following parameters is provided in the Master Thesis report (sec. 3.1.1).
+
+
+
+
+
+
+# -------------------------------Section 1-------------------------------
+# ------------Specifying the Input Values for Some Parameters------------
+
+
+# Specify: number of reservoirs
+
+param nr := 3;
+
+
+
+# Specify: number of points in time (resulted from discretization of the production period)
+
+param np := 18;
+
+
+
+# Specify: number of operational days per year
+
+param tup := 365;
+
+
+
+# Specify: the maximum number of pre-drilled wells
+
+param Nop_pd_hat := 4;
+
+param Ni_pd_hat := 1;
+
+
+
+# Specify: the maximum number of wells that are drilled in each year
+
+param Nwt_py_hat := 4;
+
+
+
+# Specify: the maximum number of injectors that are drilled in each reservoir
+
+param:		Ngi_hat		Nwi_hat	:=
+#Reservoir (i)
+1		1		3
+2		0		2
+3		0		1
+;
+
+
+
+# Specify: the maximum injection rate for every injector
+
+param qgi_pgi_hat := 4000;
+
+param qwi_pwi_hat := 6360;
+
+
+
+# Specify: PWL table to carry out 2D PWL approximation
+
+param: 		zNgi_bar	zNwi_bar	RMds_bar :=
+#m	n
+1	1	0		0		1
+1	2	0		1		2
+2	1	1		0		3
+2	2	1		1		4
+;
