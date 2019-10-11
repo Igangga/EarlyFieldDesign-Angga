@@ -1,0 +1,192 @@
+
+# -------------------------------Section 1-------------------------------
+# ------------Importing Model, Data, Econ, & PWL Table Files-------------
+
+
+model REF-CASE-2_Model.mod;
+
+data REF-CASE-2_Data.dat;
+
+data REF-CASE-2_Econ.dat;
+
+data PWL_Table.dat;
+
+
+
+
+
+
+# -------------------------------Section 2-------------------------------
+# -------------------Solver Selection & Customization--------------------
+
+
+option solver cplex;
+
+
+
+option cplex_options "threads=8 timelimit=43200 mipdisplay=2 mipgap=0.0001 nodefile=3 bestbound return_mipgap=1";
+
+
+
+
+
+
+# -------------------------------Section 3-------------------------------
+# ---------------------Defining SOS2/SOS1 Conditions---------------------
+
+
+suffix sosno;
+
+suffix ref;
+
+param itersos2;
+
+let itersos2 := 0;
+
+for{i in R, z in P} {
+	
+	let itersos2 := itersos2-1;
+	
+	let {j in V_Np} eta_Np[i,z,j].sosno := itersos2;
+	
+	let {j in V_Np} eta_Np[i,z,j].ref := Np_bar[i,j,1,1];
+	
+	let itersos2 := itersos2-1;
+	
+	let {k in V_Nop[i]} eta_Nop[i,z,k].sosno := itersos2;
+	
+	let {k in V_Nop[i]} eta_Nop[i,z,k].ref := Nop_bar[i,1,k,1];
+	
+}
+
+
+
+
+
+
+# -------------------------------Section 4-------------------------------
+# -------------------Solving the Optimization Problem--------------------
+
+
+solve;
+
+
+
+
+
+
+# -------------------------------Section 5-------------------------------
+# ------------------Extracting the Optimization Results------------------
+
+
+display RM 			>REF-CASE-2_Results.out;
+
+display Nop 			>REF-CASE-2_Results.out;
+
+display Nop_F 			>REF-CASE-2_Results.out;
+
+display Ngi 			>REF-CASE-2_Results.out;
+
+display Ngi_F 			>REF-CASE-2_Results.out;
+
+display Nwi 			>REF-CASE-2_Results.out;
+
+display Nwi_F 			>REF-CASE-2_Results.out;
+
+display Nwt 			>REF-CASE-2_Results.out;
+
+display Nwt_F			>REF-CASE-2_Results.out;
+
+display qopp			>REF-CASE-2_Results.out;
+
+display qopp_F			>REF-CASE-2_Results.out;
+
+display qo			>REF-CASE-2_Results.out;
+
+display qo_F			>REF-CASE-2_Results.out;
+
+display qg			>REF-CASE-2_Results.out;
+
+display qg_F			>REF-CASE-2_Results.out;
+
+display qw			>REF-CASE-2_Results.out;
+
+display qw_F			>REF-CASE-2_Results.out;
+
+display qgi			>REF-CASE-2_Results.out;
+
+display qgi_F			>REF-CASE-2_Results.out;
+
+display qwi			>REF-CASE-2_Results.out;
+
+display qwi_F			>REF-CASE-2_Results.out;
+
+display Np			>REF-CASE-2_Results.out;
+
+display Np_F			>REF-CASE-2_Results.out;
+
+display Gp			>REF-CASE-2_Results.out;
+
+display Gp_F			>REF-CASE-2_Results.out;
+
+display Wp			>REF-CASE-2_Results.out;
+
+display Wp_F			>REF-CASE-2_Results.out;
+
+display Gi			>REF-CASE-2_Results.out;
+
+display Gi_F			>REF-CASE-2_Results.out;
+
+display Wi			>REF-CASE-2_Results.out;
+
+display Wi_F			>REF-CASE-2_Results.out;
+
+display PVe			>REF-CASE-2_Results.out;
+
+display PVdp			>REF-CASE-2_Results.out;
+
+display PVd			>REF-CASE-2_Results.out;
+
+display PVa			>REF-CASE-2_Results.out;
+
+display Nt			>REF-CASE-2_Results.out;
+
+display Nt_F			>REF-CASE-2_Results.out;
+
+display Nx_F			>REF-CASE-2_Results.out;
+
+display PVsc			>REF-CASE-2_Results.out;
+
+display qo_F_hat		>REF-CASE-2_Results.out;
+
+display qg_F_hat		>REF-CASE-2_Results.out;
+
+display qw_F_hat		>REF-CASE-2_Results.out;
+
+display PVtc			>REF-CASE-2_Results.out;
+
+display PVap			>REF-CASE-2_Results.out;
+
+display PVo			>REF-CASE-2_Results.out;
+
+display PVr			>REF-CASE-2_Results.out;
+
+display DCF			>REF-CASE-2_Results.out;
+
+display NPV			>REF-CASE-2_Results.out;
+
+display eq4_5			>REF-CASE-2_Results.out;
+
+display eq4_5.bestbound		>REF-CASE-2_Results.out;
+
+display eq4_5.relmipgap		>REF-CASE-2_Results.out;
+
+display _nvars			>CASE-2_Results.out;
+
+display _ncons			>CASE-2_Results.out;
+
+display _solve_elapsed_time	>CASE-2_Results.out;
+
+display _solve_time 		>CASE-2_Results.out;
+
+close REF-CASE-2_Results.out;

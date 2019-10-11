@@ -1,16 +1,7 @@
 
-# PWL table is input to any software that performs PWL approximation. This file contains a PWL table to carry out 3D PWL approximations. This file also includes the number of breakpoints in the 3D PWL approximations.
-
-
-
-
-
-
 # -------------------------------Section 1-------------------------------
 # ------------Specifying the Input Values for Some Parameters------------
 
-
-# Specify: number of breakpoints in 3D PWL approximations
 
 param nbp_Np := 10;
 
@@ -22,8 +13,6 @@ param: 		nbp_Nop		nbp_RM	:=
 ;
 
 
-
-# Specify : PWL table to carry out 3D PWL approximations
 
 param: 					Np_bar		Nop_bar		RMpp_bar	qopp_bar	Gp_bar		Wp_bar		Gi_bar		Wi_bar :=
 #Reservoir (i)	j	k	l
