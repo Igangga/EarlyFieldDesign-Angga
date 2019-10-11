@@ -1,0 +1,156 @@
+
+# -------------------------------Section 1-------------------------------
+# ---------------Importing Model, Data, & PWL Table Files----------------
+
+
+model REF-CASE-1_Model.mod;
+
+data REF-CASE-1_Data.dat;
+
+data PWL_Table.dat;
+
+
+
+
+
+
+# -------------------------------Section 2-------------------------------
+# -------------------Solver Selection & Customization--------------------
+
+
+option solver gurobi;
+
+
+
+option gurobi_options "threads=8 timelim=43200 outlev=1 mipgap=0.0001 nodefilestart=0.5 bestbound=1";
+
+
+
+
+
+
+# -------------------------------Section 3-------------------------------
+# ---------------------Defining SOS2/SOS1 Conditions---------------------
+
+
+suffix sosno;
+
+suffix ref;
+
+param itersos2;
+
+let itersos2 := 0;
+
+for{i in R, z in P} {
+	
+	let itersos2 := itersos2-1;
+	
+	let {j in V_Np} eta_Np[i,z,j].sosno := itersos2;
+	
+	let {j in V_Np} eta_Np[i,z,j].ref := Np_bar[i,j,1,1];
+	
+	let itersos2 := itersos2-1;
+	
+	let {k in V_Nop[i]} eta_Nop[i,z,k].sosno := itersos2;
+	
+	let {k in V_Nop[i]} eta_Nop[i,z,k].ref := Nop_bar[i,1,k,1];
+	
+}
+
+
+
+
+
+
+# -------------------------------Section 4-------------------------------
+# -------------------Solving the Optimization Problem--------------------
+
+
+solve;
+
+
+
+
+
+
+# -------------------------------Section 5-------------------------------
+# ------------------Extracting the Optimization Results------------------
+
+
+display qo_F_plateau 		>REF-CASE-1_Results.out;
+
+display RM 			>REF-CASE-1_Results.out;
+
+display Nop 			>REF-CASE-1_Results.out;
+
+display Nop_F 			>REF-CASE-1_Results.out;
+
+display Ngi 			>REF-CASE-1_Results.out;
+
+display Ngi_F 			>REF-CASE-1_Results.out;
+
+display Nwi 			>REF-CASE-1_Results.out;
+
+display Nwi_F 			>REF-CASE-1_Results.out;
+
+display Nwt 			>REF-CASE-1_Results.out;
+
+display Nwt_F			>REF-CASE-1_Results.out;
+
+display qopp			>REF-CASE-1_Results.out;
+
+display qopp_F			>REF-CASE-1_Results.out;
+
+display qo			>REF-CASE-1_Results.out;
+
+display qo_F			>REF-CASE-1_Results.out;
+
+display qg			>REF-CASE-1_Results.out;
+
+display qg_F			>REF-CASE-1_Results.out;
+
+display qw			>REF-CASE-1_Results.out;
+
+display qw_F			>REF-CASE-1_Results.out;
+
+display qgi			>REF-CASE-1_Results.out;
+
+display qgi_F			>REF-CASE-1_Results.out;
+
+display qwi			>REF-CASE-1_Results.out;
+
+display qwi_F			>REF-CASE-1_Results.out;
+
+display Np			>REF-CASE-1_Results.out;
+
+display Np_F			>REF-CASE-1_Results.out;
+
+display Gp			>REF-CASE-1_Results.out;
+
+display Gp_F			>REF-CASE-1_Results.out;
+
+display Wp			>REF-CASE-1_Results.out;
+
+display Wp_F			>REF-CASE-1_Results.out;
+
+display Gi			>REF-CASE-1_Results.out;
+
+display Gi_F			>REF-CASE-1_Results.out;
+
+display Wi			>REF-CASE-1_Results.out;
+
+display Wi_F			>REF-CASE-1_Results.out;
+
+display eq3_1			>REF-CASE-1_Results.out;
+
+display eq3_1.bestbound		>REF-CASE-1_Results.out;
+
+display _nvars			>REF-CASE-1_Results.out;
+
+display _ncons			>REF-CASE-1_Results.out;
+
+display _solve_elapsed_time	>REF-CASE-1_Results.out;
+
+display _solve_time		>REF-CASE-1_Results.out;
+
+close REF-CASE-1_Results.out;
