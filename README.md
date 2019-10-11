@@ -2,7 +2,7 @@ EarlyFieldDesign-Angga-Optimization routine for early hydrocarbon field design u
 
 Based on the Master thesis of I Gusti Angga. When citing this work use: I Gusti, A. Automated Decision Support Methodologies for Field Development - The Safari Field Case. Master thesis. NTNU. 2019
 
-Optimization routines in AMPL for finding optimal production and injection schedules, drilling schedules or recovery mechanism to maximize plateau or net present value.Read the document "General Information.pdf" for more information
+Optimization routines in AMPL for finding optimal production and injection schedules, drilling schedules or recovery mechanism to maximize plateau or net present value. Read the document "General Information.pdf" for more information
 
 -These routines are provided under the GNU General Public License Version 3. 
 
